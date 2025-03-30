@@ -1,5 +1,6 @@
 --[[
 
+
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -228,6 +229,14 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+	"sainnhe/sonokai",
+	"scottmckendry/cyberdream.nvim",
+	"Mofiqul/vscode.nvim",
+	"sainnhe/everforest",
+	"sainnhe/gruvbox-material",
+	"rose-pine/neovim",
+	"rebelot/kanagawa.nvim",
+	"yetone/avante.nvim",
 	"iruzo/matrix-nvim",
 	"ThePrimeagen/harpoon",
 	--"RRethy/base16-nvim",
@@ -1076,4 +1085,5 @@ vim.opt.shell = "bash"
 vim.g.matrix_italic = false
 vim.g.matrix_disable_background = false
 vim.g.matrix_contrast = false
-vim.cmd([[colorscheme matrix]])
+
+vim.cmd([[colorscheme gruvbox-material]])
