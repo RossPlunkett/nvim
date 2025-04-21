@@ -248,6 +248,17 @@ require("lazy").setup({
 	"ThePrimeagen/harpoon",
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 
+	{
+		"S1M0N38/love2d.nvim",
+		event = "VeryLazy",
+		opts = {},
+		keys = {
+			-- NOTE : these done at end of file
+			-- { "<leader>h", ft = "lua", desc = "LÖVE" },
+			-- { "<leader>hs", "<cmd>LoveRun<cr>", ft = "lua", desc = "Run LÖVE" },
+			-- { "<leader>hq", "<cmd>LoveStop<cr>", ft = "lua", desc = "Stop LÖVE" },
+		},
+	},
 	-- NOTE: Plugins can also be added by using a table,
 	-- with the first argument being the link and the following
 	-- keys can be used to configure plugin behavior/loading/etc.
@@ -1096,16 +1107,45 @@ local lackluster = require("lackluster")
 
 -- !must called setup() before setting the colorscheme!
 lackluster.setup({
-    tweak_syntax = {
-        comment = lackluster.color.gray4, -- or gray5
-    },
-    tweak_background = {
-        normal = 'none',
-        telescope = 'none',
-        menu = lackluster.color.gray3,
-        popup = 'default',
-    },
+	tweak_syntax = {
+		comment = lackluster.color.gray4, -- or gray5
+	},
+	tweak_background = {
+		normal = "none",
+		telescope = "none",
+		menu = lackluster.color.gray3,
+		popup = "default",
+	},
 })
 
 -- !must set colorscheme after calling setup()!
-vim.cmd.colorscheme("lackluster")
+vim.cmd.colorscheme("everforest")
+
+-- love2d colon commands, fires even with accidental capital T
+vim.cmd([[cnoreabbrev ty LoveRun]])
+vim.cmd([[cnoreabbrev Ty LoveRun]])
+vim.cmd([[cnoreabbrev tt LoveStop]])
+vim.cmd([[cnoreabbrev Tt LoveStop]])
+vim.cmd([[cnoreabbrev tg LoveStop]])
+
+-- remove the split shortcut so we can use leader v for love2d stuff
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "netrw",
+	callback = function()
+		vim.keymap.set("n", "v", "<Nop>", { buffer = true }) -- kill the old vertical split key
+	end,
+})
+
+-- love2d leader commands
+vim.keymap.set("n", "<leader>v", "<Nop>", { desc = "LÖVE Menu" }) -- just a prefix holder
+vim.keymap.set("n", "<leader>vx", "<cmd>LoveRun<cr>", { desc = "Run LÖVE", silent = true })
+vim.keymap.set("n", "<leader>vz", "<cmd>LoveStop<cr>", { desc = "Stop LÖVE", silent = true })
+vim.cmd([[cnoreabbrev Tg LoveStop]])
+
+-- restart command
+vim.keymap.set("n", "<leader>vr", function()
+	vim.cmd("LoveStop")
+	vim.defer_fn(function()
+		vim.cmd("LoveRun")
+	end, 200) -- delay in *milliseconds*, duh
+end, { desc = "Restart LÖVE" })
