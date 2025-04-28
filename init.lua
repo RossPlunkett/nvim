@@ -190,6 +190,10 @@ vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right win
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
 
+-- ROSS: remove C-_ for autocomplete confirm
+
+vim.keymap.set("i", "<C-_>", "<Nop>")
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -715,7 +719,7 @@ require("lazy").setup({
 				--    https://github.com/pmizio/typescript-tools.nvim
 				--
 				-- But for many setups, the LSP (`ts_ls`) will work just fine
-				-- ts_ls = {},
+				ts_ls = {},
 				--
 
 				lua_ls = {
@@ -732,6 +736,11 @@ require("lazy").setup({
 						},
 					},
 				},
+
+				html = {},
+				cssls = {},
+				intelephense = {},
+				emmet_language_server = {},
 			}
 
 			-- Ensure the servers and tools above are installed
@@ -882,6 +891,7 @@ require("lazy").setup({
 					--  This will auto-import if your LSP supports it.
 					--  This will expand snippets if the LSP sent a snippet.
 					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-_>"] = cmp.mapping.confirm({ select = true }),
 
 					-- If you prefer more traditional completion keymaps,
 					-- you can uncomment the following lines
@@ -1016,6 +1026,8 @@ require("lazy").setup({
 				"query",
 				"vim",
 				"vimdoc",
+				"javascript",
+				"typescript",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
@@ -1149,3 +1161,16 @@ vim.keymap.set("n", "<leader>vr", function()
 		vim.cmd("LoveRun")
 	end, 200) -- delay in *milliseconds*, duh
 end, { desc = "Restart LÖVE" })
+
+-- emmet abbreviaton support in js template literals
+require("lspconfig")["emmet_language_server"].setup({
+	filetypes = { "javascript", "typescript", "html" },
+	-- Enable Emmet in template literals
+	settings = {
+		emmet = {
+			javascript = {
+				template_string = true, -- Enable Emmet for template literals in JS
+			},
+		},
+	},
+})
