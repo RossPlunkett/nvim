@@ -267,6 +267,7 @@ require("lazy").setup({
 	-- with the first argument being the link and the following
 	-- keys can be used to configure plugin behavior/loading/etc.
 	--
+	"ryanoasis/vim-devicons",
 	-- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
 	--
 
@@ -963,12 +964,41 @@ require("lazy").setup({
 		end,
 	},
 
-	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
 		event = "VimEnter",
 		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
+		opts = {
+			signs = false,
+			keywords = {
+				-- Add or override keywords here
+				GOTTA = { icon = " ", color = "warning", alt = { "WARN", "HACK" } },
+				-- You can also explicitly set other keywords if you want to customize them
+				-- WARN  = { icon = " ", color = "warning" },
+				-- HACK  = { icon = " ", color = "warning" },
+				WANNA = { icon = " ", color = "cyan" }, -- custom color name
+				WTF = {
+					icon = " ",
+					color = "white",
+					alt = {
+						"FUCK",
+						"SHIT",
+						"SHITFUCK",
+						"JESUS",
+						"DEATH",
+						"GODDAMN",
+						"GOD_DAMN",
+						"KILLME",
+						"GOD_IS_DEAD",
+					},
+				}, -- custom color name
+				-- ... other keywords ...
+			},
+			colors = {
+				cyan = { "#00FFFF" }, -- cobalt blue hex code
+				white = { "#FFFFFF" },
+			},
+		},
 	},
 
 	{ -- Collection of various small independent plugins/modules
