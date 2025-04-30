@@ -1161,7 +1161,7 @@ lackluster.setup({
 })
 
 -- !must set colorscheme after calling setup()!
-vim.cmd.colorscheme("everforest")
+vim.cmd.colorscheme("matrix")
 
 -- love2d colon commands, fires even with accidental capital T
 vim.cmd([[cnoreabbrev ty LoveRun]])
