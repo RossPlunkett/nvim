@@ -251,6 +251,12 @@ require("lazy").setup({
 	-- coloschemes over
 	"ThePrimeagen/harpoon",
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
+	{
+		"rmagatti/auto-session",
+		config = function()
+			require("auto-session").setup()
+		end,
+	},
 
 	{
 		"S1M0N38/love2d.nvim",
@@ -986,10 +992,12 @@ require("lazy").setup({
 						"SHITFUCK",
 						"JESUS",
 						"DEATH",
+						"DEAD",
 						"GODDAMN",
 						"GOD_DAMN",
 						"KILLME",
 						"GOD_IS_DEAD",
+						"BABY",
 					},
 				}, -- custom color name
 				-- ... other keywords ...
@@ -1204,3 +1212,8 @@ require("lspconfig")["emmet_language_server"].setup({
 		},
 	},
 })
+
+require("lspconfig")["lua_ls"].setup({
+	filetypes = { "lua", "pd_lua" },
+})
+vim.cmd([[ autocmd BufRead,BufNewFile *.pd_lua set filetype=lua ]])
