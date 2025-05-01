@@ -1169,7 +1169,7 @@ lackluster.setup({
 })
 
 -- !must set colorscheme after calling setup()!
-vim.cmd.colorscheme("matrix")
+vim.cmd.colorscheme("kanagawa-dragon")
 
 -- love2d colon commands, fires even with accidental capital T
 vim.cmd([[cnoreabbrev ty LoveRun]])
@@ -1177,6 +1177,7 @@ vim.cmd([[cnoreabbrev Ty LoveRun]])
 vim.cmd([[cnoreabbrev tt LoveStop]])
 vim.cmd([[cnoreabbrev Tt LoveStop]])
 vim.cmd([[cnoreabbrev tg LoveStop]])
+vim.cmd([[cnoreabbrev Tg LoveStop]])
 
 -- remove the split shortcut so we can use leader v for love2d stuff
 vim.api.nvim_create_autocmd("FileType", {
@@ -1190,7 +1191,6 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.keymap.set("n", "<leader>v", "<Nop>", { desc = "LÖVE Menu" }) -- just a prefix holder
 vim.keymap.set("n", "<leader>vx", "<cmd>LoveRun<cr>", { desc = "Run LÖVE", silent = true })
 vim.keymap.set("n", "<leader>vz", "<cmd>LoveStop<cr>", { desc = "Stop LÖVE", silent = true })
-vim.cmd([[cnoreabbrev Tg LoveStop]])
 
 -- restart command
 vim.keymap.set("n", "<leader>vr", function()
