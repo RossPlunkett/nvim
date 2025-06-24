@@ -242,7 +242,6 @@ require("lazy").setup({
 	"sainnhe/gruvbox-material",
 	"rose-pine/neovim",
 	"rebelot/kanagawa.nvim",
-	"yetone/avante.nvim",
 	"iruzo/matrix-nvim",
 	"kepano/flexoki",
 	"ellisonleao/gruvbox.nvim",
@@ -898,6 +897,7 @@ require("lazy").setup({
 					--  This will auto-import if your LSP supports it.
 					--  This will expand snippets if the LSP sent a snippet.
 					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-o>"] = cmp.mapping.confirm({ select = true }),
 					["<C-_>"] = cmp.mapping.confirm({ select = true }),
 
 					-- If you prefer more traditional completion keymaps,
@@ -998,6 +998,9 @@ require("lazy").setup({
 						"KILLME",
 						"GOD_IS_DEAD",
 						"BABY",
+						"HEY_ASSHOLE",
+						"ASSHOLE",
+						"READ_THIS_FUCKFACE",
 					},
 				}, -- custom color name
 				-- ... other keywords ...
@@ -1169,7 +1172,7 @@ lackluster.setup({
 })
 
 -- !must set colorscheme after calling setup()!
-vim.cmd.colorscheme("kanagawa-dragon")
+vim.cmd.colorscheme("blue")
 
 -- love2d colon commands, fires even with accidental capital T
 vim.cmd([[cnoreabbrev ty LoveRun]])
@@ -1216,4 +1219,44 @@ require("lspconfig")["emmet_language_server"].setup({
 require("lspconfig")["lua_ls"].setup({
 	filetypes = { "lua", "pd_lua" },
 })
+
+-- user commands down here
+
+vim.api.nvim_create_user_command("Ever", function()
+	vim.cmd("colorscheme everforest")
+end, {})
 vim.cmd([[ autocmd BufRead,BufNewFile *.pd_lua set filetype=lua ]])
+
+-- Custom bindings for colorschemes
+
+-- Custom bindings for colorschemes
+vim.api.nvim_create_user_command("Ever", function()
+	vim.cmd("colorscheme everforest")
+end, {})
+vim.api.nvim_create_user_command("Matrix", function()
+	vim.cmd("colorscheme matrix")
+end, {})
+vim.api.nvim_create_user_command("Moon", function()
+	vim.cmd("colorscheme moonfly")
+end, {})
+vim.api.nvim_create_user_command("Tokyo", function()
+	vim.cmd("colorscheme tokyonight-night")
+end, {})
+vim.api.nvim_create_user_command("Blue", function()
+	vim.cmd("colorscheme blue")
+end, {})
+vim.api.nvim_create_user_command("Darkblue", function()
+	vim.cmd("colorscheme darkblue")
+end, {})
+vim.api.nvim_create_user_command("Lotus", function()
+	vim.cmd("colorscheme kanagawa-lotus")
+end, {})
+vim.api.nvim_create_user_command("Dragon", function()
+	vim.cmd("colorscheme kanagawa-dragon")
+end, {})
+vim.api.nvim_create_user_command("Wave", function()
+	vim.cmd("colorscheme kanagawa-wave")
+end, {})
+vim.api.nvim_create_user_command("Vim", function()
+	vim.cmd("colorscheme vim")
+end, {})
