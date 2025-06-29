@@ -233,6 +233,8 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
+	-- lush plugin to support various themes
+	"rktjmp/lush.nvim",
 	-- colorschemes
 	"nyoom-engineering/oxocarbon.nvim",
 	"sainnhe/sonokai",
@@ -247,6 +249,18 @@ require("lazy").setup({
 	"ellisonleao/gruvbox.nvim",
 	"bluz71/vim-moonfly-colors",
 	"slugbyte/lackluster.nvim",
+	"oxfist/night-owl.nvim",
+	"xero/miasma.nvim",
+	"zootedb0t/citruszest.nvim",
+	"ray-x/aurora",
+	"kvrohit/mellow.nvim",
+	"Everblush/everblush.nvim",
+	"cryptomilk/nightcity.nvim",
+	"eldritch-theme/eldritch.nvim",
+	"maxmx03/fluoromachine.nvim",
+	"miikanissi/modus-themes.nvim",
+	"uloco/bluloco.nvim",
+	"0xstepit/flow.nvim",
 	-- coloschemes over
 	"ThePrimeagen/harpoon",
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
@@ -1260,3 +1274,67 @@ end, {})
 vim.api.nvim_create_user_command("Vim", function()
 	vim.cmd("colorscheme vim")
 end, {})
+vim.api.nvim_create_user_command("Elf", function()
+	vim.cmd("colorscheme elflord")
+end, {})
+vim.api.nvim_create_user_command("Industry", function()
+	vim.cmd("colorscheme industry")
+end, {})
+vim.api.nvim_create_user_command("Cyber", function()
+	vim.cmd("colorscheme cyberdream")
+end, {})
+vim.api.nvim_create_user_command("Mono", function()
+	vim.cmd("colorscheme sonokai")
+end, {})
+vim.api.nvim_create_user_command("Desert", function()
+	vim.cmd("colorscheme desert")
+end, {})
+vim.api.nvim_create_user_command("Rand", function()
+	vim.cmd("colorscheme desert")
+end, {})
+vim.api.nvim_create_user_command("Slate", function()
+	vim.cmd("colorscheme slate")
+end, {})
+vim.api.nvim_create_user_command("Luna", function()
+	vim.cmd("colorscheme lunaperche")
+end, {})
+vim.api.nvim_create_user_command("Lack", function()
+	vim.cmd("colorscheme lackluster-mint")
+end, {})
+vim.api.nvim_create_user_command("VScode", function()
+	vim.cmd("colorscheme vscode")
+end, {})
+vim.api.nvim_create_user_command("Mini", function()
+	vim.cmd("colorscheme minischeme")
+end, {})
+vim.api.nvim_create_user_command("Owl", function()
+	vim.cmd("colorscheme night-owl")
+end, {})
+vim.api.nvim_create_user_command("Miasma", function()
+	vim.cmd("colorscheme miasma")
+end, {})
+vim.api.nvim_create_user_command("Citrus", function()
+	vim.cmd("colorscheme citruszest")
+end, {})
+vim.api.nvim_create_user_command("Flow", function()
+	vim.cmd("colorscheme flow")
+end, {})
+
+-- select all keymap
+
+local function select_all_yank_and_return()
+	local win = 0 -- current window
+	local pos = vim.api.nvim_win_get_cursor(win) -- save {line, col}
+	vim.cmd("normal! ggVG")
+	vim.cmd('normal! "*y')
+	vim.api.nvim_win_set_cursor(win, pos)
+end
+
+-- Key mappings
+-- vim.keymap.set("n", "<C-a>", select_all_yank_and_return, { desc = "Select All, Yank to Clipboard, Restore Cursor" })
+vim.keymap.set(
+	"n",
+	"<leader>sa",
+	select_all_yank_and_return,
+	{ desc = "Select All, Yank to Clipboard, Restore Cursor" }
+)
