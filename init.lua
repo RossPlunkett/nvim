@@ -245,6 +245,7 @@ require("lazy").setup({
 	"rose-pine/neovim",
 	"rebelot/kanagawa.nvim",
 	"iruzo/matrix-nvim",
+	"luisiacc/the-matrix.nvim",
 	"kepano/flexoki",
 	"ellisonleao/gruvbox.nvim",
 	"bluz71/vim-moonfly-colors",
@@ -261,6 +262,7 @@ require("lazy").setup({
 	"miikanissi/modus-themes.nvim",
 	"uloco/bluloco.nvim",
 	"0xstepit/flow.nvim",
+	"ribru17/bamboo.nvim",
 	-- coloschemes over
 	"ThePrimeagen/harpoon",
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
@@ -992,7 +994,19 @@ require("lazy").setup({
 			signs = false,
 			keywords = {
 				-- Add or override keywords here
-				GOTTA = { icon = " ", color = "warning", alt = { "WARN", "HACK" } },
+				GOTTA = {
+					icon = " ",
+					color = "warning",
+					alt = {
+						"WARN",
+						"HACK",
+						"BRIANQ",
+						"BRIANQUESTION",
+						"JANJAQ",
+						"JANJAQUESTION",
+					},
+				},
+				NOPROD = { color = "error" },
 				-- You can also explicitly set other keywords if you want to customize them
 				-- WARN  = { icon = " ", color = "warning" },
 				-- HACK  = { icon = " ", color = "warning" },
@@ -1186,7 +1200,6 @@ lackluster.setup({
 })
 
 -- !must set colorscheme after calling setup()!
-vim.cmd.colorscheme("blue")
 
 -- love2d colon commands, fires even with accidental capital T
 vim.cmd([[cnoreabbrev ty LoveRun]])
@@ -1299,6 +1312,7 @@ vim.api.nvim_create_user_command("Luna", function()
 	vim.cmd("colorscheme lunaperche")
 end, {})
 vim.api.nvim_create_user_command("Lack", function()
+	vim.cmd("colorscheme tokyonight-night")
 	vim.cmd("colorscheme lackluster-mint")
 end, {})
 vim.api.nvim_create_user_command("VScode", function()
@@ -1319,6 +1333,9 @@ end, {})
 vim.api.nvim_create_user_command("Flow", function()
 	vim.cmd("colorscheme flow")
 end, {})
+vim.api.nvim_create_user_command("Viv", function()
+	vim.cmd("colorscheme modus_vivendi")
+end, {})
 
 -- select all keymap
 
@@ -1338,3 +1355,34 @@ vim.keymap.set(
 	select_all_yank_and_return,
 	{ desc = "Select All, Yank to Clipboard, Restore Cursor" }
 )
+
+vim.keymap.set("n", "<leader>gl", function()
+	vim.api.nvim_put({ "console.log(``);" }, "c", true, true)
+	vim.cmd("normal! F`a")
+	vim.cmd("startinsert")
+end, { desc = "Insert console.log and enter insert mode inside backticks" })
+
+vim.cmd("colorscheme tokyonight-night")
+vim.cmd("colorscheme lackluster-mint")
+
+-- if it's a server start in matrix color theme
+vim.api.nvim_create_autocmd("VimEnter", {
+	pattern = "*",
+	callback = function()
+		local cwd = vim.fn.getcwd()
+		if string.sub(cwd, -7) == "-server" then
+			vim.cmd("colorscheme matrix")
+		end
+	end,
+})
+
+-- if it's an app start in moonfly color theme
+vim.api.nvim_create_autocmd("VimEnter", {
+	pattern = "*",
+	callback = function()
+		local cwd = vim.fn.getcwd()
+		if string.sub(cwd, -4) == "-app" then
+			vim.cmd("colorscheme moonfly")
+		end
+	end,
+})
