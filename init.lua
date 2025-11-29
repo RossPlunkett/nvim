@@ -1363,7 +1363,7 @@ vim.keymap.set("n", "<leader>gl", function()
 end, { desc = "Insert console.log and enter insert mode inside backticks" })
 
 vim.cmd("colorscheme tokyonight-night")
-vim.cmd("colorscheme lackluster-mint")
+-- vim.cmd("colorscheme lackluster-mint")
 
 -- if it's a server start in matrix color theme
 vim.api.nvim_create_autocmd("VimEnter", {
