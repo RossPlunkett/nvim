@@ -1016,6 +1016,8 @@ require("lazy").setup({
 					color = "white",
 					alt = {
 						"FUCK",
+						"HEADING",
+						"CHAPTER",
 						"SHIT",
 						"SHITFUCK",
 						"JESUS",
