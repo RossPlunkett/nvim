@@ -1233,9 +1233,10 @@ vim.keymap.set("n", "<leader>vr", function()
 end, { desc = "Restart LÖVE" })
 
 -- emmet abbreviaton support in js template literals
-require("lspconfig")["emmet_language_server"].setup({
+vim.lsp.config.emmet_language_server = {
+	cmd = { "emmet-language-server", "--stdio" },
 	filetypes = { "javascript", "typescript", "html" },
-	-- Enable Emmet in template literals
+	root_markers = { ".git" },
 	settings = {
 		emmet = {
 			javascript = {
@@ -1243,11 +1244,15 @@ require("lspconfig")["emmet_language_server"].setup({
 			},
 		},
 	},
-})
+}
+vim.lsp.enable("emmet_language_server")
 
-require("lspconfig")["lua_ls"].setup({
+vim.lsp.config.lua_ls = {
+	cmd = { "lua-language-server" },
 	filetypes = { "lua", "pd_lua" },
-})
+	root_markers = { { ".luarc.json", ".luarc.jsonc" }, ".git" },
+}
+vim.lsp.enable("lua_ls")
 
 -- user commands down here
 
