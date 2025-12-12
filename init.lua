@@ -781,6 +781,7 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"css-variables-language-server", -- CSS class/ID completion in JS
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -893,7 +894,10 @@ require("lazy").setup({
 						luasnip.lsp_expand(args.body)
 					end,
 				},
-				completion = { completeopt = "menu,menuone,noinsert" },
+				completion = {
+					completeopt = "menu,menuone,noinsert",
+					autocomplete = { cmp.TriggerEvent.TextChanged, cmp.TriggerEvent.InsertEnter },
+				},
 
 				-- For an understanding of why these mappings were
 				-- chosen, you will need to read `:help ins-completion`
@@ -959,6 +963,7 @@ require("lazy").setup({
 					{ name = "luasnip" },
 					{ name = "path" },
 					{ name = "nvim_lsp_signature_help" },
+					{ name = "css_classes" },
 				},
 			})
 		end,
@@ -1247,6 +1252,24 @@ vim.lsp.config.emmet_language_server = {
 }
 vim.lsp.enable("emmet_language_server")
 
+-- hopefully this brings in css classes from /css while writing js template strings
+vim.lsp.config.css_variables = {
+	cmd = { "css-variables-language-server", "--stdio" },
+	filetypes = { "javascript", "typescript", "html", "css" },
+	root_markers = { ".git", "package.json", "jsconfig.json" },
+	settings = {
+		css = {
+			validate = true,
+			lint = {
+				compatibleVendorPrefixes = "warning",
+				vendorPrefix = "warning",
+				duplicateProperties = "warning",
+			},
+		},
+	},
+}
+vim.lsp.enable("css_variables")
+
 vim.lsp.config.lua_ls = {
 	cmd = { "lua-language-server" },
 	filetypes = { "lua", "pd_lua" },
@@ -1374,11 +1397,22 @@ vim.cmd("colorscheme tokyonight-night")
 
 -- if it's a server start in matrix color theme
 vim.api.nvim_create_autocmd("VimEnter", {
-	pattern = "*",
 	callback = function()
 		local cwd = vim.fn.getcwd()
-		if string.sub(cwd, -7) == "-server" then
+		if string.sub(cwd, -16) == "scheduler-server" then
+			vim.cmd("colorscheme blue")
+		end
+		if string.sub(cwd, -11) == "todo-server" then
 			vim.cmd("colorscheme matrix")
+		end
+		if string.sub(cwd, -10) == "-scheduler" then
+			vim.cmd("colorscheme tokyonight-night")
+		end
+		if string.sub(cwd, -5) == "-todo" then
+			vim.cmd("colorscheme moonfly")
+		end
+		if string.sub(cwd, -12) == "-csoundfreak" then
+			vim.cmd("colorscheme citruszest")
 		end
 	end,
 })
@@ -1393,3 +1427,19 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		end
 	end,
 })
+
+-- Setup CSS classes loader
+require("css-classes-loader").setup()
+
+-- Custom command to view CSS classes debug log
+vim.api.nvim_create_user_command("CSSLog", function()
+	local log_file = vim.fn.stdpath("cache") .. "/css-classes-debug.log"
+	vim.cmd("edit " .. log_file)
+end, { desc = "View CSS Classes debug log" })
+
+-- Custom command to clear CSS classes debug log
+vim.api.nvim_create_user_command("CSSLogClear", function()
+	local log_file = vim.fn.stdpath("cache") .. "/css-classes-debug.log"
+	os.remove(log_file)
+	print("CSS log cleared")
+end, { desc = "Clear CSS Classes debug log" })
