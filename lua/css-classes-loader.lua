@@ -43,31 +43,39 @@ local function parse_css_file(filepath)
 	return classes
 end
 
--- Scan all CSS files in directory
-local function scan_css_files(directory)
+-- Scan all CSS files in one or more directories
+local function scan_css_files(directories)
 	local classes = {}
+	directories = type(directories) == "table" and directories or { directories }
 
-	local handle = io.popen("find " .. directory .. ' -name "*.css" -type f 2>/dev/null')
-	if not handle then
-		log("Failed to open directory: " .. directory, true)
-		return classes
-	end
-
-	for filepath in handle:lines() do
-		local file_classes = parse_css_file(filepath)
-		for class, _ in pairs(file_classes) do
-			classes[class] = true
+	for _, directory in ipairs(directories) do
+		local handle = io.popen("find " .. directory .. ' -name "*.css" -type f 2>/dev/null')
+		if handle then
+			for filepath in handle:lines() do
+				local file_classes = parse_css_file(filepath)
+				for class, _ in pairs(file_classes) do
+					classes[class] = true
+				end
+			end
+			handle:close()
 		end
 	end
-	handle:close()
 
 	return classes
 end
 
--- Update CSS classes from project CSS folder
-function M.update_classes(css_dir)
-	css_dir = css_dir or vim.fn.getcwd() .. "/css"
-	css_classes = scan_css_files(css_dir)
+local function get_css_roots()
+	local cwd = vim.fn.getcwd()
+	return {
+		cwd .. "/css",
+		cwd .. "/src",
+	}
+end
+
+-- Update CSS classes from project CSS folders
+function M.update_classes(css_dirs)
+	css_dirs = css_dirs or get_css_roots()
+	css_classes = scan_css_files(css_dirs)
 	last_update = vim.loop.now()
 	return css_classes
 end
@@ -114,26 +122,35 @@ end
 
 -- Watch CSS files for changes and reload
 function M.setup_watcher()
-	local css_dir = vim.fn.getcwd() .. "/css"
+	local group = vim.api.nvim_create_augroup("css-classes-loader", { clear = true })
 	vim.api.nvim_create_autocmd("BufWritePost", {
-		pattern = css_dir .. "/*.css",
-		callback = function()
-			M.update_classes(css_dir)
+		pattern = "*.css",
+		group = group,
+		callback = function(args)
+			local roots = get_css_roots()
+			local saved_file = vim.fn.fnamemodify(args.file, ":p")
+			for _, root in ipairs(roots) do
+				local root_path = vim.fn.fnamemodify(root, ":p")
+				if saved_file:sub(1, #root_path) == root_path then
+					M.update_classes(roots)
+					return
+				end
+			end
 		end,
 	})
 end
 
 -- Initial load and setup
 function M.setup()
-	local css_dir = vim.fn.getcwd() .. "/css"
+	local css_roots = get_css_roots()
 
-	M.update_classes(css_dir)
+	M.update_classes(css_roots)
 	M.setup_cmp_source()
 	M.setup_watcher()
 
 	-- Add keymapping to manually reload
 	vim.keymap.set("n", "<leader>cr", function()
-		M.update_classes(css_dir)
+		M.update_classes(css_roots)
 	end, { desc = "Reload CSS classes" })
 end
 
