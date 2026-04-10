@@ -284,6 +284,50 @@ require("lazy").setup({
 			-- { "<leader>hq", "<cmd>LoveStop<cr>", ft = "lua", desc = "Stop LÖVE" },
 		},
 	},
+	{
+		"mfussenegger/nvim-dap",
+		dependencies = {
+			"rcarriga/nvim-dap-ui",
+			"nvim-neotest/nvim-nio",
+		},
+		config = function()
+			local dap = require("dap")
+			local dapui = require("dapui")
+
+			dapui.setup()
+
+			dap.adapters.lldb = {
+				type = "executable",
+				command = "/usr/bin/lldb-dap",
+				name = "lldb",
+			}
+
+			dap.configurations.cpp = {
+				{
+					name = "JUCE Host",
+					type = "lldb",
+					request = "launch",
+					program = "/home/felix/temp/csoundfreak/apps/juce-host/NewProject/Builds/LinuxMakefile/build/NewProject",
+					cwd = "/home/felix/temp/csoundfreak/apps/juce-host/NewProject/Builds/LinuxMakefile",
+					stopOnEntry = false,
+					args = {},
+					runInTerminal = false,
+				},
+			}
+
+			dap.configurations.c = dap.configurations.cpp
+
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
+			end
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close()
+			end
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close()
+			end
+		end,
+	},
 	-- NOTE: Plugins can also be added by using a table,
 	-- with the first argument being the link and the following
 	-- keys can be used to configure plugin behavior/loading/etc.
@@ -731,7 +775,12 @@ require("lazy").setup({
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				-- clangd = {},
+				clangd = {
+					cmd = {
+						"clangd",
+						"--compile-commands-dir=/home/felix/temp/csoundfreak/apps/juce-host/NewProject/Builds/LinuxMakefile",
+					},
+				},
 				-- gopls = {},
 				-- pyright = {},
 				-- rust_analyzer = {},
@@ -1171,6 +1220,16 @@ require("lazy").setup({
 		},
 	},
 })
+
+local ok_dap, dap = pcall(require, "dap")
+if ok_dap then
+	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "[D]ebug toggle [B]reakpoint" })
+	vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "[D]ebug [C]ontinue" })
+	vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "[D]ebug step [I]nto" })
+	vim.keymap.set("n", "<leader>do", dap.step_over, { desc = "[D]ebug step [O]ver" })
+	vim.keymap.set("n", "<leader>dO", dap.step_out, { desc = "[D]ebug step out" })
+	vim.keymap.set("n", "<leader>dr", dap.repl.open, { desc = "[D]ebug [R]EPL" })
+end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
