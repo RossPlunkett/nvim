@@ -263,6 +263,25 @@ require("lazy").setup({
 	"uloco/bluloco.nvim",
 	"0xstepit/flow.nvim",
 	"ribru17/bamboo.nvim",
+	"zekzekus/menguless",
+	"fxn/vim-monochrome",
+	"koron/vim-monochromenote",
+	"robertmeta/nofrils",
+	"widatama/vim-phoenix",
+	-- black and white themes
+	"andreasvc/vim-256noir",
+	"plan9-for-vimspace/acme-colors",
+	"huyvohcmc/atlas.vim",
+	"t184256/vim-boring",
+	-- "~romainl/vim-bruin", -- doesnt work
+	"plan9-for-vimspace/acme-colors",
+	"jaredgorski/Mies.vim",
+	"koron/vim-monochromenote",
+	"ryanpcmcquen/true-monochrome_vim",
+	"zaki/zazen",
+	-- grayscale themes
+	"hardselius/warlock",
+	"pgdouyon/vim-yin-yang",
 	-- coloschemes over
 	"ThePrimeagen/harpoon",
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
@@ -1058,6 +1077,9 @@ require("lazy").setup({
 						"BRIANQUESTION",
 						"JANJAQ",
 						"JANJAQUESTION",
+						"CHECKMELATER",
+						"MULTI-INSTANCE",
+						"VIDEO",
 					},
 				},
 				NOPROD = { color = "error" },
@@ -1426,6 +1448,10 @@ vim.api.nvim_create_user_command("Viv", function()
 	vim.cmd("colorscheme modus_vivendi")
 end, {})
 
+vim.api.nvim_create_user_command("Phoenix", function()
+	vim.cmd("colorscheme phoenix")
+end, {})
+
 -- select all keymap
 
 local function select_all_yank_and_return()
@@ -1451,7 +1477,7 @@ vim.keymap.set("n", "<leader>gl", function()
 	vim.cmd("startinsert")
 end, { desc = "Insert console.log and enter insert mode inside backticks" })
 
-vim.cmd("colorscheme tokyonight-night")
+vim.cmd("colorscheme phoenix")
 -- vim.cmd("colorscheme lackluster-mint")
 
 -- if it's a server start in matrix color theme
@@ -1463,6 +1489,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 		end
 		if string.sub(cwd, -11) == "todo-server" then
 			vim.cmd("colorscheme matrix")
+			vim.cmd("Matrix")
 		end
 		if string.sub(cwd, -10) == "-scheduler" then
 			vim.cmd("colorscheme tokyonight-night")
